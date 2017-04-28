@@ -2,8 +2,6 @@ package constants;
 
 /**
  * All supported commands
- *
- * Created by hbhaisare on 15/11/2016.
  */
 public class Command {
 

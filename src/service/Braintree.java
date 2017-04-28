@@ -6,10 +6,7 @@ import java.util.Arrays;
 
 import static constants.Error.*;
 
-/**
- * Created by hbhaisare on 19/11/2016.
- */
-public class Venmo {
+public class Braintree {
 
     private UserService userService;
 
@@ -18,13 +15,13 @@ public class Venmo {
     private PaymentService paymentService;
 
     /**
-     * Venmo Application runs with user, card and payment services
+     * Braintree Application runs with user, card and payment services
      *
      * @param userService
      * @param cardService
      * @param paymentService
      */
-    public Venmo(UserService userService, CardService cardService, PaymentService paymentService) {
+    public Braintree(UserService userService, CardService cardService, PaymentService paymentService) {
         this.userService = userService;
         this.cardService = cardService;
         this.paymentService = paymentService;

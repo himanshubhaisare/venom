@@ -8,9 +8,6 @@ import validator.Username;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class UserService {
 
     /**

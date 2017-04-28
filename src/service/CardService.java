@@ -6,9 +6,6 @@ import resource.Card;
 import resource.User;
 import validator.Luhn;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class CardService {
 
     public CardService() {

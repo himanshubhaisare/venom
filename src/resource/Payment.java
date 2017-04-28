@@ -2,18 +2,15 @@ package resource;
 
 import java.math.BigDecimal;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class Payment {
 
-    public User actor;
+    private User actor;
 
-    public User target;
+    private User target;
 
-    public BigDecimal amount;
+    private BigDecimal amount;
 
-    public String note;
+    private String note;
 
     public Payment(User actor, User target, BigDecimal amount, String note) {
         this.actor = actor;

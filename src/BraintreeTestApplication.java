@@ -1,16 +1,13 @@
 import service.CardService;
 import service.PaymentService;
 import service.UserService;
-import service.Venmo;
-import tests.VenmoTest;
+import service.Braintree;
+import tests.BraintreeTest;
 
-/**
- * Created by hbhaisare on 19/11/2016.
- */
-public class VenmoTestApplication {
+public class BraintreeTestApplication {
 
     /**
-     * Venmo tests
+     * Braintree tests
      *
      * @param args
      */
@@ -19,9 +16,9 @@ public class VenmoTestApplication {
         UserService userService = new UserService();
         CardService cardService = new CardService();
         PaymentService paymentService = new PaymentService();
-        Venmo venmo = new Venmo(userService, cardService, paymentService);
-        VenmoTest venmoTest = new VenmoTest(venmo);
+        Braintree Braintree = new Braintree(userService, cardService, paymentService);
+        BraintreeTest BraintreeTest = new BraintreeTest(Braintree);
 
-        venmoTest.run();
+        BraintreeTest.run();
     }
 }

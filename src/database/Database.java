@@ -9,16 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by hbhaisare on 16/11/2016.
- */
 public class Database {
 
-    public static Map<String, User> users = new HashMap<String, User>();
+    private static Map<String, User> users = new HashMap<String, User>();
 
-    public static Map<String, Card> cards = new HashMap<String, Card>();
+    private static Map<String, Card> cards = new HashMap<String, Card>();
 
-    public static List<Payment> payments = new ArrayList<Payment>();
+    private static List<Payment> payments = new ArrayList<Payment>();
 
     public static Map<String, User> getUsers() {
         return users;

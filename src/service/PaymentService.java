@@ -12,9 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class PaymentService {
 
     public PaymentService() {

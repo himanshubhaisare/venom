@@ -4,7 +4,7 @@ input=$1
 output=$2
 
 if [[ -n "$input" ]]; then
-    java -jar venmo.jar "$input" "$output"
+    java -jar braintree.jar "$input" "$output"
 else
-    java -jar venmo.jar
+    java -jar braintree.jar
 fi

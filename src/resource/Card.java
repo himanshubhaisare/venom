@@ -2,16 +2,13 @@ package resource;
 
 import java.math.BigDecimal;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class Card {
 
-    public String number;
+    private String number;
 
-    public User user;
+    private User user;
 
-    public BigDecimal charge;
+    private BigDecimal charge;
 
     public Card(String number, User user) {
         this.number = number;

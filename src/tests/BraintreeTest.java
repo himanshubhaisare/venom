@@ -5,16 +5,13 @@ import database.Database;
 import resource.Card;
 import resource.Payment;
 import resource.User;
-import service.Venmo;
+import service.Braintree;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by hbhaisare on 19/11/2016.
- */
-public class VenmoTest {
+public class BraintreeTest {
 
     private static final String CREATE_USER_WITH_LONGER_NAME = "test cannot create user with a name longer than 15 chars";
     private static final String CREATE_USER_WITHOUT_NAME = "test cannot create user without user name";
@@ -45,10 +42,10 @@ public class VenmoTest {
     private static final String SHOW_FEED_FOR_NON_EXISTING_USER = "test cannot show feed for a user that does not exist";
     private static final String SHOW_FEED = "test show feed works";
 
-    private Venmo venmo;
+    private Braintree Braintree;
 
-    public VenmoTest(Venmo venmo) {
-        this.venmo = venmo;
+    public BraintreeTest(Braintree Braintree) {
+        this.Braintree = Braintree;
     }
 
     private void clear() {
@@ -104,15 +101,15 @@ public class VenmoTest {
     }
 
     private void testFeedForUser() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        venmo.handle("user John");
-        venmo.handle("user Newton");
-        venmo.handle("pay Himanshu Milana $3.14 pie");
-        venmo.handle("pay Himanshu John $3.14 pie");
-        venmo.handle("pay Himanshu Newton $9.81 gravity");
-        String result = venmo.handle("feed Himanshu");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        Braintree.handle("user John");
+        Braintree.handle("user Newton");
+        Braintree.handle("pay Himanshu Milana $3.14 pie");
+        Braintree.handle("pay Himanshu John $3.14 pie");
+        Braintree.handle("pay Himanshu Newton $9.81 gravity");
+        String result = Braintree.handle("feed Himanshu");
         if (result.contains("You paid Milana $3.14 for pie") &&
             result.contains("You paid John $3.14 for pie") &&
             result.contains("You paid Newton $9.81 for gravity")) {
@@ -125,7 +122,7 @@ public class VenmoTest {
     }
 
     private void testFeedWithoutUser() {
-        String result = venmo.handle("feed Himanshu");
+        String result = Braintree.handle("feed Himanshu");
         if (result.equals(Error.USER_NOT_FOUND)) {
             System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : PASS");
         } else {
@@ -134,7 +131,7 @@ public class VenmoTest {
     }
 
     private void testFeedWithoutArgs() {
-        String result = venmo.handle("feed");
+        String result = Braintree.handle("feed");
         if (result.equals(Error.INVALID_ARGS)) {
             System.out.println(SHOW_FEED_WITHOUT_ARGS+" : PASS");
         } else {
@@ -143,11 +140,11 @@ public class VenmoTest {
     }
 
     private void testPaymentWithActorTargetAmountNotes() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        venmo.handle("add Milana 4111111111111111");
-        venmo.handle("pay Milana Himanshu $0.10 for being a good husband");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        Braintree.handle("add Milana 4111111111111111");
+        Braintree.handle("pay Milana Himanshu $0.10 for being a good husband");
         User himanshu = Database.getUser("Himanshu");
 
         if (himanshu.getBalance().equals(new BigDecimal("0.10"))) {
@@ -160,9 +157,9 @@ public class VenmoTest {
     }
 
     private void testPaymentWithoutCard() {
-        venmo.handle("user Himanshu");
-        venmo.handle("user Milana");
-        String result = venmo.handle("pay Himanshu Milana $10.50 for breaking glass jar");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("user Milana");
+        String result = Braintree.handle("pay Himanshu Milana $10.50 for breaking glass jar");
         if (result.equals(Error.CARD_NOT_FOUND)) {
             System.out.println(MAKE_PAYMENT_WITHOUT_CARD+" : PASS");
         } else {
@@ -173,9 +170,9 @@ public class VenmoTest {
     }
 
     private void testPaymentToYourself() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        String result = venmo.handle("pay Himanshu Himanshu $10.50 for looper");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        String result = Braintree.handle("pay Himanshu Himanshu $10.50 for looper");
         if (result.equals(Error.CANNOT_PAY_SELF)) {
             System.out.println(MAKE_PAYMENT_TO_SELF+" : PASS");
         } else {
@@ -186,11 +183,11 @@ public class VenmoTest {
     }
 
     private void testPaymentWithoutNotes() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        venmo.handle("add Milana 4111111111111111");
-        String result = venmo.handle("pay Himanshu Milana $10.50");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        Braintree.handle("add Milana 4111111111111111");
+        String result = Braintree.handle("pay Himanshu Milana $10.50");
         if (result.equals(Error.INVALID_ARGS)) {
             System.out.println(MAKE_PAYMENT_WITHOUT_NOTES+" : PASS");
         } else {
@@ -201,7 +198,7 @@ public class VenmoTest {
     }
 
     private void testPaymentWithoutArgs() {
-        String result = venmo.handle("pay");
+        String result = Braintree.handle("pay");
         if (result.contains(Error.INVALID_ARGS)) {
             System.out.println(MAKE_PAYMENT_WITHOUT_USER+" : PASS");
         } else {
@@ -210,12 +207,12 @@ public class VenmoTest {
     }
 
     private void testBalanceAfterReceivingPayment() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        venmo.handle("add Milana 4111111111111111");
-        venmo.handle("pay Himanshu Milana $10.50 for not doing dishes");
-        String result = venmo.handle("balance Milana");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        Braintree.handle("add Milana 4111111111111111");
+        Braintree.handle("pay Himanshu Milana $10.50 for not doing dishes");
+        String result = Braintree.handle("balance Milana");
         if (result.equals("$10.50")) {
             System.out.println(CHECK_BALANCE_AFTER_RECEIVING_PAYMENT+" Milana "+result+" : PASS");
         } else {
@@ -226,12 +223,12 @@ public class VenmoTest {
     }
 
     private void testBalanceAfterMakingPayment() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        venmo.handle("add Milana 4111111111111111");
-        venmo.handle("pay Himanshu Milana $10.50 for not doing dishes");
-        String result = venmo.handle("balance Himanshu");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        Braintree.handle("add Milana 4111111111111111");
+        Braintree.handle("pay Himanshu Milana $10.50 for not doing dishes");
+        String result = Braintree.handle("balance Himanshu");
         if (result.equals("$0")) {
             System.out.println(CHECK_BALANCE_AFTER_MAKING_PAYMENT+" Himanshu "+result+" : PASS");
         } else {
@@ -242,8 +239,8 @@ public class VenmoTest {
     }
 
     private void testStartingBalanceOnUser() {
-        venmo.handle("user Himanshu");
-        String balance = venmo.handle("balance Himanshu");
+        Braintree.handle("user Himanshu");
+        String balance = Braintree.handle("balance Himanshu");
         if (balance.equals("$0")) {
             System.out.println(STARTING_BALANCE_ON_USER+" Himanshu "+balance+" : PASS");
         } else {
@@ -254,7 +251,7 @@ public class VenmoTest {
     }
 
     private void testBalanceOnNonExistingUser() {
-        String result = venmo.handle("balance Himanshu");
+        String result = Braintree.handle("balance Himanshu");
         if (result.contains(Error.USER_NOT_FOUND)) {
             System.out.println(CHECK_BALANCE_USER_NOT_FOUND+" Himanshu : PASS");
         } else {
@@ -263,7 +260,7 @@ public class VenmoTest {
     }
 
     private void testBalanceWithoutUser() {
-        String result = venmo.handle("balance");
+        String result = Braintree.handle("balance");
         if (result.contains(Error.INVALID_ARGS)) {
             System.out.println(CHECK_BALANCE_WITHOUT_USER+" : PASS");
         } else {
@@ -272,11 +269,11 @@ public class VenmoTest {
     }
 
     private void testChargeOnCardAfterMakingPayment() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        venmo.handle("add Milana 4111111111111111");
-        venmo.handle("pay Himanshu Milana $10.50 for not doing dishes");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        Braintree.handle("add Milana 4111111111111111");
+        Braintree.handle("pay Himanshu Milana $10.50 for not doing dishes");
         User himanshu = Database.getUser("Himanshu");
         Card card = himanshu.getCard();
         if (card.getCharge().equals(new BigDecimal("10.50"))) {
@@ -289,10 +286,10 @@ public class VenmoTest {
     }
 
     private void testAddAnotherUsersCard() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        venmo.handle("user Milana");
-        String result = venmo.handle("add Milana 5454545454545454");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Milana");
+        String result = Braintree.handle("add Milana 5454545454545454");
         if (result.contains(Error.CARD_BELONGS_TO_ANOTHER_USER)) {
             System.out.println(ADD_ANOTHER_USERS_CARD+" Milana 5454545454545454 : PASS");
         } else {
@@ -303,9 +300,9 @@ public class VenmoTest {
     }
 
     private void testAddSecondCardOnUser() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
-        String result = venmo.handle("add Himanshu 4111111111111111");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
+        String result = Braintree.handle("add Himanshu 4111111111111111");
         if (result.contains(Error.USER_ALREADY_HAS_CARD)) {
             System.out.println(ADD_SECOND_CARD+" Himanshu 4111111111111111 : PASS");
         } else {
@@ -316,8 +313,8 @@ public class VenmoTest {
     }
 
     private void testAddNonLuhnCard() {
-        venmo.handle("user Himanshu");
-        String result = venmo.handle("add Himanshu 1234567890123456");
+        Braintree.handle("user Himanshu");
+        String result = Braintree.handle("add Himanshu 1234567890123456");
         if (result.contains(Error.CARD_NUMBER_INVALID)) {
             System.out.println(ADD_NON_LUHN_CARD+" Himanshu 1234567890123456 : PASS");
         } else {
@@ -328,8 +325,8 @@ public class VenmoTest {
     }
 
     private void testAddCardWithUser() {
-        venmo.handle("user Himanshu");
-        venmo.handle("add Himanshu 5454545454545454");
+        Braintree.handle("user Himanshu");
+        Braintree.handle("add Himanshu 5454545454545454");
         Card card = Database.getCard("5454545454545454");
         if (card != null) {
             System.out.println(ADD_CARD_WITH_USER+" Himanshu 5454545454545454 : PASS");
@@ -341,7 +338,7 @@ public class VenmoTest {
     }
 
     private void testAddCardOnNonExistingUser() {
-        String result = venmo.handle("add Himanshu 5454545454545454");
+        String result = Braintree.handle("add Himanshu 5454545454545454");
         if (result.contains(Error.USER_NOT_FOUND)) {
             System.out.println(ADD_CARD_ON_NON_EXISTING_USER+" Himanshu : PASS");
         } else {
@@ -350,7 +347,7 @@ public class VenmoTest {
     }
 
     private void testAddCardWithoutUser() {
-        String result = venmo.handle("add");
+        String result = Braintree.handle("add");
         if (result.contains(Error.INVALID_ARGS)) {
             System.out.println(ADD_CARD_WITHOUT_USER+" : PASS");
         } else {
@@ -359,7 +356,7 @@ public class VenmoTest {
     }
 
     private void testBadCommand() {
-        String result = venmo.handle("foobar");
+        String result = Braintree.handle("foobar");
         if (result.contains(Error.COMMAND_NOT_RECOGNIZED)) {
             System.out.println(BAD_COMMAND+" foobar : PASS");
         } else {
@@ -368,7 +365,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithoutName() {
-        String result = venmo.handle("user");
+        String result = Braintree.handle("user");
         if (result.contains(Error.INVALID_ARGS)) {
             System.out.println(CREATE_USER_WITHOUT_NAME+" : PASS");
         } else {
@@ -377,7 +374,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithName() {
-        venmo.handle("user Himanshu");
+        Braintree.handle("user Himanshu");
         User user = Database.getUser("Himanshu");
         if (user != null) {
             System.out.println(CREATE_USER_WITH_NAME+" Himanshu : PASS");
@@ -390,7 +387,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithLongerName() {
-        String result = venmo.handle("user HimanshuVasantBhaisareIsMyFullName");
+        String result = Braintree.handle("user HimanshuVasantBhaisareIsMyFullName");
         if (result.contains(Error.USERNAME_INVALID)) {
             System.out.println(CREATE_USER_WITH_LONGER_NAME+" HimanshuVasantBhaisareIsMyFullName : PASS");
         } else {
@@ -399,7 +396,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithShorterName() {
-        String result = venmo.handle("user Him");
+        String result = Braintree.handle("user Him");
         if (result.contains(Error.USERNAME_INVALID)) {
             System.out.println(CREATE_USER_WITH_SHORTER_NAME+" Him : PASS");
         } else {
@@ -408,7 +405,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithUnderscoreName() {
-        venmo.handle("user Him_an_shu");
+        Braintree.handle("user Him_an_shu");
         User user = Database.getUser("Him_an_shu");
         if (user != null) {
             System.out.println(CREATE_USER_WITH_UNDERSCORE_NAME+" Him_an_shu : PASS");
@@ -421,7 +418,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithDashName() {
-        venmo.handle("user Him-ans-shu");
+        Braintree.handle("user Him-ans-shu");
         User user = Database.getUser("Him-ans-shu");
         if (user != null) {
             System.out.println(CREATE_USER_WITH_DASH_NAME+" Him-ans-shu : PASS");
@@ -434,7 +431,7 @@ public class VenmoTest {
     }
 
     private void testCreateUserWithAlphanumericName() {
-        venmo.handle("user H1m8n3hu");
+        Braintree.handle("user H1m8n3hu");
         User user = Database.getUser("H1m8n3hu");
         if (user != null) {
             System.out.println(CREATE_USER_WITH_ALPHANUM_NAME+" H1m8n3hu : PASS");

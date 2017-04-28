@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-/**
- * Created by hbhaisare on 17/11/2016.
- */
 public class Utils {
 
     /**

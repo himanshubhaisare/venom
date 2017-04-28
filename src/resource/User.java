@@ -2,14 +2,11 @@ package resource;
 
 import java.math.BigDecimal;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class User {
 
-    public String name;
+    private String name;
 
-    public BigDecimal balance;
+    private BigDecimal balance;
 
     public Card card;
 

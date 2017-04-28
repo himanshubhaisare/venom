@@ -3,9 +3,6 @@ package validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by hbhaisare on 15/11/2016.
- */
 public class Username {
 
     /**

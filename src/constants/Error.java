@@ -1,8 +1,5 @@
 package constants;
 
-/**
- * Created by hbhaisare on 16/11/2016.
- */
 public class Error {
 
     public static final String COMMAND_NOT_RECOGNIZED = "ERROR: command not recognized";
