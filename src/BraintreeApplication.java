@@ -16,8 +16,7 @@ public class BraintreeApplication {
     public static void main(String[] args) {
         UserService userService = new UserService();
         CardService cardService = new CardService();
-        PaymentService paymentService = new PaymentService();
-        Braintree braintree = new Braintree(userService, cardService, paymentService);
+        Braintree braintree = new Braintree(userService, cardService);
         if (args.length > 1) {
             try {
                 File output = Utils.getOutputFile(args);

@@ -1,5 +1,4 @@
 import service.CardService;
-import service.PaymentService;
 import service.UserService;
 import service.Braintree;
 import tests.BraintreeTest;
@@ -15,8 +14,7 @@ public class BraintreeTestApplication {
 
         UserService userService = new UserService();
         CardService cardService = new CardService();
-        PaymentService paymentService = new PaymentService();
-        Braintree Braintree = new Braintree(userService, cardService, paymentService);
+        Braintree Braintree = new Braintree(userService, cardService);
         BraintreeTest BraintreeTest = new BraintreeTest(Braintree);
 
         BraintreeTest.run();

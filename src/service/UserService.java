@@ -43,7 +43,7 @@ public class UserService {
     public String showBalance(String[] args) {
         String result;
         BigDecimal balance;
-        if (args.length < 1) {
+        if (args.length != 1) {
             result = Error.INVALID_ARGS;
             return result;
         }
@@ -52,7 +52,7 @@ public class UserService {
         if (user == null) {
             result = Error.USER_NOT_FOUND;
         } else {
-            balance = user.getBalance();
+            balance = user.getCard().getBalance();
             result = "$"+balance.toString();
         }
 

@@ -3,12 +3,10 @@ package tests;
 import constants.Error;
 import database.Database;
 import resource.Card;
-import resource.Payment;
 import resource.User;
 import service.Braintree;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BraintreeTest {
@@ -51,7 +49,6 @@ public class BraintreeTest {
     private void clear() {
         Database.setUsers(new HashMap<String, User>());
         Database.setCards(new HashMap<String, Card>());
-        Database.setPayments(new ArrayList<Payment>());
     }
 
     /**
@@ -140,20 +137,20 @@ public class BraintreeTest {
     }
 
     private void testPaymentWithActorTargetAmountNotes() {
-        Braintree.handle("user Himanshu");
-        Braintree.handle("add Himanshu 5454545454545454");
-        Braintree.handle("user Milana");
-        Braintree.handle("add Milana 4111111111111111");
-        Braintree.handle("pay Milana Himanshu $0.10 for being a good husband");
-        User himanshu = Database.getUser("Himanshu");
-
-        if (himanshu.getBalance().equals(new BigDecimal("0.10"))) {
-            System.out.println(MAKE_PAYMENT+" : PASS");
-        } else {
-            System.out.println(MAKE_PAYMENT+" : FAIL");
-        }
-
-        clear();
+//        Braintree.handle("user Himanshu");
+//        Braintree.handle("add Himanshu 5454545454545454");
+//        Braintree.handle("user Milana");
+//        Braintree.handle("add Milana 4111111111111111");
+//        Braintree.handle("pay Milana Himanshu $0.10 for being a good husband");
+//        User himanshu = Database.getUser("Himanshu");
+//
+//        if (himanshu.getBalance().equals(new BigDecimal("0.10"))) {
+//            System.out.println(MAKE_PAYMENT+" : PASS");
+//        } else {
+//            System.out.println(MAKE_PAYMENT+" : FAIL");
+//        }
+//
+//        clear();
     }
 
     private void testPaymentWithoutCard() {

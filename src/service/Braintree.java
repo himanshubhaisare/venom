@@ -10,19 +10,15 @@ public class Braintree {
 
     private CardService cardService;
 
-    private PaymentService paymentService;
-
     /**
      * Braintree Application runs with user, card and payment services
      *
      * @param userService
      * @param cardService
-     * @param paymentService
      */
-    public Braintree(UserService userService, CardService cardService, PaymentService paymentService) {
+    public Braintree(UserService userService, CardService cardService) {
         this.userService = userService;
         this.cardService = cardService;
-        this.paymentService = paymentService;
     }
 
     /**
@@ -56,15 +52,6 @@ public class Braintree {
                         result = this.userService.showBalance(args);
 						result += "\n";
                         break;
-                    case Command.USER:
-                        result = this.userService.create(args);
-                        break;
-                    case Command.PAY:
-                        result = this.paymentService.create(args);
-                        break;
-                    case Command.FEED:
-                        result = this.paymentService.retrieve(args);
-                        break;
                     default:
                         result = COMMAND_NOT_RECOGNIZED;
                         break;
@@ -73,10 +60,9 @@ public class Braintree {
         }
 
 		if(result.equals(COMMAND_NOT_RECOGNIZED) || result.equals(INVALID_ARGS) ||
-				result.equals(USER_ALREADY_HAS_CARD) || result.equals(CARD_BELONGS_TO_ANOTHER_USER) ||
-				result.equals(USER_NOT_FOUND) || result.equals(ACTOR_NOT_FOUND) || result.equals(TARGET_NOT_FOUND) ||
-				result.equals(CARD_NOT_FOUND) || result.equals(USERNAME_INVALID) || result.equals(CARD_NUMBER_INVALID) ||
-				result.equals(CANNOT_PAY_SELF)) {
+            result.equals(USER_ALREADY_HAS_CARD) || result.equals(CARD_BELONGS_TO_ANOTHER_USER) ||
+            result.equals(USER_NOT_FOUND) || result.equals(CARD_NOT_FOUND) ||
+            result.equals(USERNAME_INVALID) || result.equals(CARD_NUMBER_INVALID)) {
 			result += "\n";
 		}
 

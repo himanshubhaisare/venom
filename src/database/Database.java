@@ -1,12 +1,9 @@
 package database;
 
 import resource.Card;
-import resource.Payment;
 import resource.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Database {
@@ -14,8 +11,6 @@ public class Database {
     private static Map<String, User> users = new HashMap<String, User>();
 
     private static Map<String, Card> cards = new HashMap<String, Card>();
-
-    private static List<Payment> payments = new ArrayList<Payment>();
 
     public static Map<String, User> getUsers() {
         return users;
@@ -47,17 +42,5 @@ public class Database {
 
     public static void setCard(Card card) {
         Database.cards.put(card.getNumber(), card);
-    }
-
-    public static List<Payment> getPayments() {
-        return payments;
-    }
-
-    public static void setPayments(List<Payment> payments) {
-        Database.payments = payments;
-    }
-
-    public static void setPayment(Payment payment) {
-        payments.add(payment);
     }
 }
