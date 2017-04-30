@@ -5,6 +5,7 @@ import database.Database;
 import resource.Card;
 import resource.User;
 import validator.Luhn;
+import validator.Money;
 
 public class CardService {
 
@@ -20,7 +21,7 @@ public class CardService {
     public String create(String[] args) {
         Card card;
         String result = "";
-        if (args.length < 2) {
+        if (args.length < 3) {
             result = Error.INVALID_ARGS;
             return result;
         }
@@ -28,6 +29,10 @@ public class CardService {
         card = Database.getCard(args[1]);
         if (user == null) {
             result = Error.USER_NOT_FOUND;
+            return result;
+        }
+        if (!Money.validate(args[2])) {
+            result = Error.CREDIT_LIMIT_AMOUNT_INVALID;
             return result;
         }
 

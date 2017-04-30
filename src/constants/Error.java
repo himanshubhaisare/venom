@@ -13,4 +13,5 @@ public class Error {
     public static final String USERNAME_INVALID = "ERROR: this user name is invalid";
     public static final String CARD_NUMBER_INVALID = "ERROR: this card is invalid";
     public static final String CANNOT_PAY_SELF = "ERROR: users cannot pay themselves";
+    public static final String CREDIT_LIMIT_AMOUNT_INVALID = "ERROR: credit limit amount is invalid";
 }

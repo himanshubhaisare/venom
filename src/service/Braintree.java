@@ -1,9 +1,7 @@
 package service;
 
 import constants.Command;
-
 import java.util.Arrays;
-
 import static constants.Error.*;
 
 public class Braintree {
@@ -45,6 +43,7 @@ public class Braintree {
             } else {
                 switch (command) {
                     case Command.ADD:
+                        result = this.userService.create(args);
                         result = this.cardService.create(args);
                         break;
                     case Command.CHARGE:

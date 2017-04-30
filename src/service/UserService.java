@@ -6,7 +6,6 @@ import resource.User;
 import validator.Username;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 public class UserService {
 
@@ -19,12 +18,12 @@ public class UserService {
     public String create(String[] args) {
         User user;
         String result = "";
-        if (args.length < 1) {
+        if (args.length < 3) {
             result = Error.INVALID_ARGS;
             return result;
         }
 
-        String name = Utils.concatenate(Arrays.copyOfRange(args, 0, args.length));
+        String name = args[1];
         if (Username.validate(name)) {
             user = new User(name);
             Database.setUser(user);

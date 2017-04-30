@@ -41,13 +41,11 @@ public class BraintreeApplication {
                 Scanner scanner = new Scanner(System.in);
                 input = scanner.nextLine();
                 if (input.equals("help")) {
-                    System.out.print("user <name> : to create a user. e.g. user Himanshu \n" +
-                            "add <user> <card number> : to add a credit card on user. e.g. add Himanshu 5555555555554444 \n" +
-                            "balance <user> : to view balance of a user e.g. balance Himanshu \n" +
-                            "pay <actor> <target> <$amount> <note> : pay someone e.g. pay Himanshu Lisa $10.50 for coffee \n" +
-                            "feed <user> : shows activity feed of a user e.g. feed Himanshu \n" +
-                            "help : brings up manual \n" +
-                            "close : closes mini-braintree\n");
+                    System.out.print(
+                            "Add <user> <card number> <$limit> : Adds a credit card on user with given credit limit e.g. Add Himanshu 5555555555554444 $1000\n" +
+                            "Charge <user> <$amount> : Charge user with given amount, increases balance on card e.g. Charge Tom $500 \n" +
+                            "Credit <user> <$amount> : Credit decreases balance on user's card by given amount e.g. Credit Lisa $100 \n" +
+                            "help : brings up menu");
                 } else {
                     String result = braintree.handle(input);
                     System.out.print(result);
