@@ -1,48 +1,80 @@
-## Requirements
-JRE 8. Download here if you dont have it https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html
+# Basic Credit Card Processing
+-----
 
-## How to run application
+Imagine that you're writing software for a credit card provider.  Implement a
+program that will add new credit card accounts, process charges and credits
+against them, and display summary information.
 
-mini braintree supports two modes of execution. `cd` into the directory where you extracted the code and executable.
+## Requirements:
 
-1. to start interactive mode just type `./mini-braintree.sh`
+- Your program must accept input from two sources: a filename passed in
+  command line arguments and STDIN. For example, on Linux or OSX both
+  './myprogram input.txt' and './myprogram < input.txt' should work.
+- Your program must accept three input commands passed with space delimited
+  arguments.
+- "Add" will create a new credit card for a given name, card number, and limit
+   - Card numbers should be validated using Luhn 10
+   - New cards start with a $0 balance
+- "Charge" will increase the balance of the card associated with the provided
+  name by the amount specified
+   - Charges that would raise the balance over the limit are ignored as if they
+     were declined
+   - Charges against Luhn 10 invalid cards are ignored
+- "Credit" will decrease the balance of the card associated with the provided
+  name by the amount specified
+   - Credits that would drop the balance below $0 will create a negative balance
+   - Credits against Luhn 10 invalid cards are ignored
+- When all input has been read and processed, a summary should be generated and
+  written to STDOUT.
+- The summary should include the name of each person followed by a colon and
+  balance
+- The names should be displayed alphabetically
+- Display "error" instead of the balance if the credit card number does not pass
+  Luhn 10
 
+## Input Assumptions:
 
-    $./mini-braintree.sh
-    mini braintree started in interactive mode. Enter help to see manual.
-    > help
-    user <name> : to create a user. e.g. user Himanshu
-    add <user> <card number> : to add a credit card on user. e.g. add Himanshu 5555555555554444 
-    balance <user> : to view balance of a user e.g. balance Himanshu 
-    pay <actor> <target> <$amount> <note> : pay someone e.g. pay Himanshu Lisa $10.50 for coffee 
-    feed <user> : shows activity feed of a user e.g. feed Himanshu 
-    help : brings up manual 
-    close : closes mini-braintree
+- All input will be valid -- there's no need to check for illegal characters
+  or malformed commands.
+- All input will be space delimited
+- Credit card numbers may vary in length up to 19 characters
+- Credit card numbers will always be numeric
+- Amounts will always be prefixed with "$" and will be in whole dollars (no
+  decimals)
 
-2. from a file of newline-delimited commands, when provided with one argument. Following example will accept input from input.txt file and will create output in a file named output.txt
+## Example Input:
 
+```
+Add Tom 4111111111111111 $1000
+Add Lisa 5454545454545454 $3000
+Add Quincy 1234567890123456 $2000
+Charge Tom $500
+Charge Tom $800
+Charge Lisa $7
+Credit Lisa $100
+Credit Quincy $200
+```
 
-    $./mini-braintree.sh input.txt
-   
-## How to run tests
+## Example Output:
 
+```
+Lisa: $-93
+Quincy: error
+Tom: $500
+```
 
-    $./mini-Bbraintree-test.sh
-    
-## Design decisions
+Implement your solution in any programming language you wish, but keep in mind
+we may ask you to explain or extend your code.  Please write automated tests
+and include them with your submission.
 
-1. After reading the requirements and the list of input, output; I realized that there are three main resources
-    * User
-    * Card
-    * Payment
-  
-    The resources are represented by there own classes in resources package
-2. Each resource gets their own service class where the application logic/ business logic is handled. Braintree is implemented as an orchestrator that uses other services. All services are found in service package
-3. Validators are run before creating and storing records in database. They are under validator package.
-4. Database is in memory which does not persist after the application is closed. Users and Cards are stored in maps while payments are stored in list.
-5. All commands and errors are available as string constants in constants package.
-6. Did not use any testing framework because the application was fairly simple to test. Tests are included in tests package.
-7. Scripts `mini-braintree.sh` and `mini-braintree-test.sh` simply run `braintree.jar` and `braintree-test.jar` respectively.
+In addition to your code and tests, please also include a README that explains:
 
-## Choice of Language : Java
-Java runs on almost all environments. I used `java 8` for this project. I chose java because of I feel comfortable programming in java. It is a strongly typed, forces me to make less syntax errors and it supports both procedural as well as functional programming styles which gives me more flexibility as a programmer. 
+- An overview of your design decisions
+- Why you picked the programming language you used
+- How to run your code and tests, including how to install any dependencies
+  your code may have.
+
+Thank you!
+
+**Note: this information is confidential. It is prohibited to share, post online
+or otherwise publicize without Braintree's prior written consent.**
