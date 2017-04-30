@@ -59,8 +59,8 @@ public class PaymentService {
 
         // record charge on actor's card
         Card actorCard = actor.getCard();
-        BigDecimal charge = actorCard.getCharge().add(amount);
-        actorCard.setCharge(charge);
+        BigDecimal charge = actorCard.getBalance().add(amount);
+        actorCard.setBalance(charge);
         Database.setCard(actorCard);
 
         // record balance on target

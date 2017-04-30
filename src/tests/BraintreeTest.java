@@ -276,7 +276,7 @@ public class BraintreeTest {
         Braintree.handle("pay Himanshu Milana $10.50 for not doing dishes");
         User himanshu = Database.getUser("Himanshu");
         Card card = himanshu.getCard();
-        if (card.getCharge().equals(new BigDecimal("10.50"))) {
+        if (card.getBalance().equals(new BigDecimal("10.50"))) {
             System.out.println(CHARGE_ON_CARD_AFTER_PAYMENT+" : PASS");
         } else {
             System.out.println(CHARGE_ON_CARD_AFTER_PAYMENT+" : FAIL");

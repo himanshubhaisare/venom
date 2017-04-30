@@ -8,7 +8,7 @@ public class Card {
 
     private User user;
 
-    private BigDecimal charge;
+    private BigDecimal balance;
 
     private BigDecimal creditLimit;
 
@@ -16,7 +16,7 @@ public class Card {
         this.number = number;
         this.user = user;
         this.creditLimit = creditLimit;
-        this.charge = BigDecimal.ZERO;
+        this.balance = BigDecimal.ZERO;
     }
 
     public String getNumber() {
@@ -35,12 +35,12 @@ public class Card {
         this.user = user;
     }
 
-    public BigDecimal getCharge() {
-        return charge;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setCharge(BigDecimal charge) {
-        this.charge = charge;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public BigDecimal getCreditLimit() {
