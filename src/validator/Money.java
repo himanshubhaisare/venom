@@ -17,6 +17,9 @@ public class Money {
      * @return
      */
     public static boolean validate(String amount) {
+        if (!amount.contains("$")) {
+            return false;
+        }
         amount = amount.replace("$", "");
         Pattern pattern = Pattern.compile(MONEY_PATTERN);
         Matcher matcher = pattern.matcher(amount);

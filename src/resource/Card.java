@@ -10,9 +10,12 @@ public class Card {
 
     private BigDecimal charge;
 
-    public Card(String number, User user) {
+    private BigDecimal creditLimit;
+
+    public Card(String number, User user, BigDecimal creditLimit) {
         this.number = number;
         this.user = user;
+        this.creditLimit = creditLimit;
         this.charge = BigDecimal.ZERO;
     }
 
@@ -38,5 +41,13 @@ public class Card {
 
     public void setCharge(BigDecimal charge) {
         this.charge = charge;
+    }
+
+    public BigDecimal getCreditLimit() {
+        return creditLimit;
+    }
+
+    public void setCreditLimit(BigDecimal creditLimit) {
+        this.creditLimit = creditLimit;
     }
 }
