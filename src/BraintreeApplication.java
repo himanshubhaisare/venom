@@ -45,7 +45,7 @@ public class BraintreeApplication {
                             "Add <user> <card number> <$limit> : Adds a credit card on user with given credit limit e.g. Add Himanshu 5555555555554444 $1000\n" +
                             "Charge <user> <$amount> : Charge user with given amount, increases balance on card e.g. Charge Tom $500 \n" +
                             "Credit <user> <$amount> : Credit decreases balance on user's card by given amount e.g. Credit Lisa $100 \n" +
-                            "help : brings up menu");
+                            "help : brings up manual \n");
                 } else {
                     String result = braintree.handle(input);
                     System.out.print(result);

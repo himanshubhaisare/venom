@@ -13,12 +13,13 @@ public class Money {
     /**
      * Validate dollar amount
      *
-     * @param username
+     * @param amount
      * @return
      */
-    public static boolean validate(String username) {
+    public static boolean validate(String amount) {
+        amount = amount.replace("$", "");
         Pattern pattern = Pattern.compile(MONEY_PATTERN);
-        Matcher matcher = pattern.matcher(username);
+        Matcher matcher = pattern.matcher(amount);
         return matcher.matches();
     }
 }

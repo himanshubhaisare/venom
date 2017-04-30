@@ -23,7 +23,7 @@ public class UserService {
             return result;
         }
 
-        String name = args[1];
+        String name = args[0];
         if (Username.validate(name)) {
             user = new User(name);
             Database.setUser(user);
