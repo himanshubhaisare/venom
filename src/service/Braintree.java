@@ -40,7 +40,9 @@ public class Braintree {
                 switch (command) {
                     case Command.ADD:
                         result = this.userService.create(args);
-                        result = this.cardService.create(args);
+                        if (result.equals("")) {
+                            result = this.cardService.create(args);
+                        }
                         break;
                     case Command.CHARGE:
                         result = this.cardService.charge(args);
@@ -50,7 +52,6 @@ public class Braintree {
                         break;
                     case Command.BALANCE:
                         result = this.userService.showBalance(args);
-						result += "\n";
                         break;
                     default:
                         result = COMMAND_NOT_RECOGNIZED;
@@ -59,13 +60,7 @@ public class Braintree {
             }
         }
 
-		if(result.equals(COMMAND_NOT_RECOGNIZED) || result.equals(INVALID_ARGS) ||
-            result.equals(USER_ALREADY_HAS_CARD) || result.equals(CARD_BELONGS_TO_ANOTHER_USER) ||
-            result.equals(USER_NOT_FOUND) || result.equals(CARD_NOT_FOUND) ||
-            result.equals(USERNAME_INVALID) || result.equals(CARD_NUMBER_INVALID)) {
-			result += "\n";
-		}
-
+        result += "\n";
         return result;
     }
 }
