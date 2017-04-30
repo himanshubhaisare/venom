@@ -36,16 +36,22 @@ public class Braintree {
         String result;
         String[] inputs = input.split(" ");
         if (inputs.length < 1) {
-            result = INVALID_ARGS;
+            result = "";
         } else {
             String command = inputs[0];
             String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
-            if (command == null) {
-                result = COMMAND_NOT_RECOGNIZED;
+            if (command == null || command.equals("")) {
+                result = "";
             } else {
                 switch (command) {
                     case Command.ADD:
                         result = this.cardService.create(args);
+                        break;
+                    case Command.CHARGE:
+                        result = this.cardService.charge(args);
+                        break;
+                    case Command.CREDIT:
+                        result = this.cardService.credit(args);
                         break;
                     case Command.BALANCE:
                         result = this.userService.showBalance(args);

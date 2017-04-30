@@ -50,4 +50,12 @@ public class CardService {
 
         return result;
     }
+
+    public String charge(String[] args) {
+        return null;
+    }
+
+    public String credit(String[] args) {
+        return null;
+    }
 }
