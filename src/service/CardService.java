@@ -159,7 +159,71 @@ public class CardService {
         return validation;
     }
 
+    /**
+     * Credit money towards a card's balance
+     *
+     * @param args
+     * @return
+     */
     public String credit(String[] args) {
-        return null;
+        String result = "";
+        Validation validation = validateCredit(args);
+        if (validation.isValid()) {
+            // credit money on user's card and decrease balance
+            String username = args[0];
+            BigDecimal credit = new BigDecimal(args[1].replace("$", ""));
+            User user = Database.getUser(username);
+            Card card = user.getCard();
+            BigDecimal newBalance = card.getBalance().subtract(credit);
+            card.setBalance(newBalance);
+
+            // persist new card balance
+            Database.setCard(card);
+            user.setCard(card);
+            Database.setUser(user);
+        } else {
+            result = validation.getErrorString();
+        }
+
+        return result;
+    }
+
+    /**
+     * Run validations before crediting money towards a card's balance
+     *
+     * @param args
+     * @return
+     */
+    private Validation validateCredit(String[] args) {
+        Validation validation = new Validation();
+        if (args.length != 2) {
+            validation.addError(Error.INVALID_ARGS);
+            return validation;
+        }
+
+        String username = args[0];
+        String credit = args[1];
+        if (!Money.validate(credit)) {
+            validation.addError(Error.CREDIT_AMOUNT_INVALID);
+            return validation;
+        }
+
+        User user = Database.getUser(username);
+        if (user == null) {
+            validation.addError(Error.USER_NOT_FOUND);
+            return validation;
+        }
+
+        Card card = user.getCard();
+        if (card == null) {
+            validation.addError(Error.CARD_NOT_FOUND);
+            return validation;
+        }
+        if (!Luhn.validate(card.getNumber())) {
+            validation.addError(Error.CARD_NUMBER_INVALID);
+            return validation;
+        }
+
+        return validation;
     }
 }

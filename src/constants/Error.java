@@ -16,4 +16,5 @@ public class Error {
     public static final String CREDIT_LIMIT_AMOUNT_INVALID = "ERROR: credit limit amount is invalid";
     public static final String CHARGE_AMOUNT_INVALID = "ERROR: charge amount is invalid";
     public static final String CHARGE_DECLINED = "ERROR: charge declined";
+    public static final String CREDIT_AMOUNT_INVALID = "ERROR: credit amount is invalid";
 }
