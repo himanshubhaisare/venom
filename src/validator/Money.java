@@ -17,7 +17,7 @@ public class Money {
      * @return
      */
     public static boolean validate(String amount) {
-        if (!amount.contains("$")) {
+        if (!amount.contains("$") || amount.indexOf("$") != 0) {
             return false;
         }
         amount = amount.replace("$", "");
