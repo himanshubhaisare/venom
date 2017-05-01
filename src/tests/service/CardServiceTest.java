@@ -5,10 +5,14 @@ import database.Database;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import resource.Card;
 import service.CardService;
 import service.UserService;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CardServiceTest {
 
@@ -63,6 +67,7 @@ public class CardServiceTest {
         String[] args = input.split(" ");
         String result = this.cardService.create(args);
         assertEquals("testCreateValidCard: ", "", result);
+        assertNotNull(Database.getCard("5454545454545454"));
     }
 
     @Test
@@ -151,7 +156,9 @@ public class CardServiceTest {
         input = "Himanshu $1111";
         args = input.split(" ");
         String result = this.cardService.charge(args);
+        Card card = Database.getCard("5454545454545454");
         assertEquals("testChargeOverAllowedCreditLimit: ", Error.CHARGE_DECLINED, result);
+        assertEquals("testChargeWithDollarAmount: does not update balance ", BigDecimal.ZERO, card.getBalance());
     }
 
     @Test
@@ -163,6 +170,55 @@ public class CardServiceTest {
         input = "Himanshu $500";
         args = input.split(" ");
         String result = this.cardService.charge(args);
+        Card card = Database.getCard("5454545454545454");
         assertEquals("testChargeWithDollarAmount: ", "", result);
+        assertEquals("testChargeWithDollarAmount: updates balance ", new BigDecimal("500"), card.getBalance());
+    }
+
+    @Test
+    public void testCreditWithoutDollarAmount() {
+        String input = "Himanshu";
+        String[] args = input.split(" ");
+        String result = this.cardService.credit(args);
+        assertEquals("testCreditWithoutDollarAmount: ", Error.INVALID_ARGS, result);
+    }
+
+    @Test
+    public void testCreditWithInvalidDollarAmount() {
+        String input = "Himanshu 100";
+        String[] args = input.split(" ");
+        String result = this.cardService.credit(args);
+        assertEquals("testCreditWithInvalidDollarAmount: ", Error.CREDIT_AMOUNT_INVALID, result);
+    }
+
+    @Test
+    public void testCreditWithoutUser() {
+        Database.clearAll();
+        String input = "Himanshu $100";
+        String[] args = input.split(" ");
+        String result = this.cardService.credit(args);
+        assertEquals("testCreditWithoutUser: ", Error.USER_NOT_FOUND, result);
+    }
+
+    @Test
+    public void testCreditWithoutCard() {
+        String input = "Himanshu $100";
+        String[] args = input.split(" ");
+        String result = this.cardService.credit(args);
+        assertEquals("testCreditWithoutCard: ", Error.CARD_NOT_FOUND, result);
+    }
+
+    @Test
+    public void testValidCreditDecreasesBalance() {
+        String input = "Himanshu 5454545454545454 $1000";
+        String[] args = input.split(" ");
+        this.cardService.create(args);
+
+        input = "Himanshu $100";
+        args = input.split(" ");
+        String result = this.cardService.credit(args);
+        Card card = Database.getCard("5454545454545454");
+        assertEquals("testValidCreditDecreasesBalance: ", "", result);
+        assertEquals("testValidCreditDecreasesBalance: ", new BigDecimal("-100"), card.getBalance());
     }
 }
