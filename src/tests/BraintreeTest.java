@@ -11,13 +11,6 @@ import java.util.HashMap;
 
 public class BraintreeTest {
 
-    private static final String CREATE_USER_WITH_LONGER_NAME = "test cannot create user with a name longer than 15 chars";
-    private static final String CREATE_USER_WITHOUT_NAME = "test cannot create user without user name";
-    private static final String CREATE_USER_WITH_NAME = "test create user with user name";
-    private static final String CREATE_USER_WITH_SHORTER_NAME = "test user cannot have name shorter than 4 chars";
-    private static final String CREATE_USER_WITH_UNDERSCORE_NAME = "test user can have underscores name";
-    private static final String CREATE_USER_WITH_DASH_NAME = "test user can have dashes in name";
-    private static final String CREATE_USER_WITH_ALPHANUM_NAME = "test user can have alphanumeric name";
     private static final String BAD_COMMAND = "test bad command is not recognized";
     private static final String ADD_CARD_WITHOUT_USER = "test cannot add card without providing user name";
     private static final String ADD_CARD_ON_NON_EXISTING_USER = "test cannot add card on a user that does not exist";
@@ -26,25 +19,8 @@ public class BraintreeTest {
     private static final String ADD_SECOND_CARD = "test cannot add second card on a user";
     private static final String ADD_ANOTHER_USERS_CARD = "test cannot add a card that belongs to another user";
     private static final String CHARGE_ON_CARD_AFTER_PAYMENT = "test that actor's card is charged after payment";
-    private static final String CHECK_BALANCE_WITHOUT_USER = "test cannot check check balance without providing user name";
-    private static final String STARTING_BALANCE_ON_USER = "test starting balance on a user is always $0";
-    private static final String CHECK_BALANCE_USER_NOT_FOUND = "test cannot check balance on a user that does not exist";
-    private static final String CHECK_BALANCE_AFTER_MAKING_PAYMENT = "test that balance does not decrease after making payment";
-    private static final String CHECK_BALANCE_AFTER_RECEIVING_PAYMENT = "test that balance increases after receiving payment";
-    private static final String MAKE_PAYMENT_WITHOUT_USER = "test cannot make payment without providing any arguments";
-    private static final String MAKE_PAYMENT_WITHOUT_NOTES = "test cannot make payment without providing notes";
-    private static final String MAKE_PAYMENT_TO_SELF = "test cannot make payment to yourself";
-    private static final String MAKE_PAYMENT_WITHOUT_CARD = "test actor cannot make payment without card";
-    private static final String MAKE_PAYMENT = "test actor can make payment to target";
-    private static final String SHOW_FEED_WITHOUT_ARGS = "test cannot show feed without any arguments";
-    private static final String SHOW_FEED_FOR_NON_EXISTING_USER = "test cannot show feed for a user that does not exist";
-    private static final String SHOW_FEED = "test show feed works";
 
     private Braintree Braintree;
-
-    public BraintreeTest(Braintree Braintree) {
-        this.Braintree = Braintree;
-    }
 
     private void clear() {
         Database.setUsers(new HashMap<String, User>());
@@ -59,16 +35,7 @@ public class BraintreeTest {
         // 0. bad command
         testBadCommand();
 
-        // 1. user will create a new user
-        testCreateUserWithoutName();
-        testCreateUserWithName();
-        testCreateUserWithLongerName();
-        testCreateUserWithShorterName();
-        testCreateUserWithUnderscoreName();
-        testCreateUserWithDashName();
-        testCreateUserWithAlphanumericName();
-
-        // 2. add adds a card on user
+        // 2. test cases for Add command
         testAddCardWithoutUser();
         testAddCardOnNonExistingUser();
         testAddCardWithUser();
@@ -77,195 +44,11 @@ public class BraintreeTest {
         testAddAnotherUsersCard();
         testChargeOnCardAfterMakingPayment();
 
-        // 3. balance shows user's balance
-        testBalanceWithoutUser();
-        testBalanceOnNonExistingUser();
-        testStartingBalanceOnUser();
-        testBalanceAfterMakingPayment();
-        testBalanceAfterReceivingPayment();
-
-        // 4. pay makes a payment from actor to target
-        testPaymentWithoutArgs();
-        testPaymentWithoutNotes();
-        testPaymentToYourself();
-        testPaymentWithoutCard();
-        testPaymentWithActorTargetAmountNotes();
-
-        // 5. feed shows activity feed of the user
-        testFeedWithoutArgs();
-        testFeedWithoutUser();
-        testFeedForUser();
+        // test cases for Charge command
+        // test cases for Credit command
     }
 
-    private void testFeedForUser() {
-        Braintree.handle("user Himanshu");
-        Braintree.handle("add Himanshu 5454545454545454");
-        Braintree.handle("user Milana");
-        Braintree.handle("user John");
-        Braintree.handle("user Newton");
-        Braintree.handle("pay Himanshu Milana $3.14 pie");
-        Braintree.handle("pay Himanshu John $3.14 pie");
-        Braintree.handle("pay Himanshu Newton $9.81 gravity");
-        String result = Braintree.handle("feed Himanshu");
-        if (result.contains("You paid Milana $3.14 for pie") &&
-            result.contains("You paid John $3.14 for pie") &&
-            result.contains("You paid Newton $9.81 for gravity")) {
-            System.out.println(SHOW_FEED+" : PASS");
-        } else {
-            System.out.println(SHOW_FEED+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testFeedWithoutUser() {
-        String result = Braintree.handle("feed Himanshu");
-        if (result.equals(Error.USER_NOT_FOUND)) {
-            System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : PASS");
-        } else {
-            System.out.println(SHOW_FEED_FOR_NON_EXISTING_USER+" : FAIL");
-        }
-    }
-
-    private void testFeedWithoutArgs() {
-        String result = Braintree.handle("feed");
-        if (result.equals(Error.INVALID_ARGS)) {
-            System.out.println(SHOW_FEED_WITHOUT_ARGS+" : PASS");
-        } else {
-            System.out.println(SHOW_FEED_WITHOUT_ARGS+" : FAIL");
-        }
-    }
-
-    private void testPaymentWithActorTargetAmountNotes() {
-//        Braintree.handle("user Himanshu");
-//        Braintree.handle("add Himanshu 5454545454545454");
-//        Braintree.handle("user Milana");
-//        Braintree.handle("add Milana 4111111111111111");
-//        Braintree.handle("pay Milana Himanshu $0.10 for being a good husband");
-//        User himanshu = Database.getUser("Himanshu");
-//
-//        if (himanshu.getBalance().equals(new BigDecimal("0.10"))) {
-//            System.out.println(MAKE_PAYMENT+" : PASS");
-//        } else {
-//            System.out.println(MAKE_PAYMENT+" : FAIL");
-//        }
-//
-//        clear();
-    }
-
-    private void testPaymentWithoutCard() {
-        Braintree.handle("user Himanshu");
-        Braintree.handle("user Milana");
-        String result = Braintree.handle("pay Himanshu Milana $10.50 for breaking glass jar");
-        if (result.equals(Error.CARD_NOT_FOUND)) {
-            System.out.println(MAKE_PAYMENT_WITHOUT_CARD+" : PASS");
-        } else {
-            System.out.println(MAKE_PAYMENT_WITHOUT_CARD+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testPaymentToYourself() {
-//        Braintree.handle("user Himanshu");
-//        Braintree.handle("add Himanshu 5454545454545454");
-//        String result = Braintree.handle("pay Himanshu Himanshu $10.50 for looper");
-//        if (result.equals(Error.CANNOT_PAY_SELF)) {
-//            System.out.println(MAKE_PAYMENT_TO_SELF+" : PASS");
-//        } else {
-//            System.out.println(MAKE_PAYMENT_TO_SELF+" : FAIL");
-//        }
-//
-//        clear();
-    }
-
-    private void testPaymentWithoutNotes() {
-        Braintree.handle("user Himanshu");
-        Braintree.handle("add Himanshu 5454545454545454");
-        Braintree.handle("user Milana");
-        Braintree.handle("add Milana 4111111111111111");
-        String result = Braintree.handle("pay Himanshu Milana $10.50");
-        if (result.equals(Error.INVALID_ARGS)) {
-            System.out.println(MAKE_PAYMENT_WITHOUT_NOTES+" : PASS");
-        } else {
-            System.out.println(MAKE_PAYMENT_WITHOUT_NOTES+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testPaymentWithoutArgs() {
-        String result = Braintree.handle("pay");
-        if (result.contains(Error.INVALID_ARGS)) {
-            System.out.println(MAKE_PAYMENT_WITHOUT_USER+" : PASS");
-        } else {
-            System.out.println(MAKE_PAYMENT_WITHOUT_USER+" : FAIL");
-        }
-    }
-
-    private void testBalanceAfterReceivingPayment() {
-        Braintree.handle("user Himanshu");
-        Braintree.handle("add Himanshu 5454545454545454");
-        Braintree.handle("user Milana");
-        Braintree.handle("add Milana 4111111111111111");
-        Braintree.handle("pay Himanshu Milana $10.50 for not doing dishes");
-        String result = Braintree.handle("balance Milana");
-        if (result.equals("$10.50")) {
-            System.out.println(CHECK_BALANCE_AFTER_RECEIVING_PAYMENT+" Milana "+result+" : PASS");
-        } else {
-            System.out.println(CHECK_BALANCE_AFTER_RECEIVING_PAYMENT+" Milana "+result+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testBalanceAfterMakingPayment() {
-        Braintree.handle("user Himanshu");
-        Braintree.handle("add Himanshu 5454545454545454");
-        Braintree.handle("user Milana");
-        Braintree.handle("add Milana 4111111111111111");
-        Braintree.handle("pay Himanshu Milana $10.50 for not doing dishes");
-        String result = Braintree.handle("balance Himanshu");
-        if (result.equals("$0")) {
-            System.out.println(CHECK_BALANCE_AFTER_MAKING_PAYMENT+" Himanshu "+result+" : PASS");
-        } else {
-            System.out.println(CHECK_BALANCE_AFTER_MAKING_PAYMENT+" Himanshu "+result+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testStartingBalanceOnUser() {
-        Braintree.handle("user Himanshu");
-        String balance = Braintree.handle("balance Himanshu");
-        if (balance.equals("$0")) {
-            System.out.println(STARTING_BALANCE_ON_USER+" Himanshu "+balance+" : PASS");
-        } else {
-            System.out.println(STARTING_BALANCE_ON_USER+" Himanshu "+balance+" : FAIL");
-        }
-
-        clear();
-    }
-
-    private void testBalanceOnNonExistingUser() {
-        String result = Braintree.handle("balance Himanshu");
-        if (result.contains(Error.USER_NOT_FOUND)) {
-            System.out.println(CHECK_BALANCE_USER_NOT_FOUND+" Himanshu : PASS");
-        } else {
-            System.out.println(CHECK_BALANCE_USER_NOT_FOUND+" Himanshu : FAIL");
-        }
-    }
-
-    private void testBalanceWithoutUser() {
-        String result = Braintree.handle("balance");
-        if (result.contains(Error.INVALID_ARGS)) {
-            System.out.println(CHECK_BALANCE_WITHOUT_USER+" : PASS");
-        } else {
-            System.out.println(CHECK_BALANCE_WITHOUT_USER+" : FAIL");
-        }
-    }
-
-    private void testChargeOnCardAfterMakingPayment() {
+    public void testChargeOnCardAfterMakingPayment() {
         Braintree.handle("user Himanshu");
         Braintree.handle("add Himanshu 5454545454545454");
         Braintree.handle("user Milana");
@@ -359,84 +142,5 @@ public class BraintreeTest {
         } else {
             System.out.println(BAD_COMMAND+" foobar : FAIL");
         }
-    }
-
-    private void testCreateUserWithoutName() {
-        String result = Braintree.handle("user");
-        if (result.contains(Error.INVALID_ARGS)) {
-            System.out.println(CREATE_USER_WITHOUT_NAME+" : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITHOUT_NAME+" : FAIL");
-        }
-    }
-
-    private void testCreateUserWithName() {
-        Braintree.handle("user Himanshu");
-        User user = Database.getUser("Himanshu");
-        if (user != null) {
-            System.out.println(CREATE_USER_WITH_NAME+" Himanshu : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_NAME+" Himanshu : FAIL");
-        }
-
-        // clear database
-        clear();
-    }
-
-    private void testCreateUserWithLongerName() {
-        String result = Braintree.handle("user HimanshuVasantBhaisareIsMyFullName");
-        if (result.contains(Error.USERNAME_INVALID)) {
-            System.out.println(CREATE_USER_WITH_LONGER_NAME+" HimanshuVasantBhaisareIsMyFullName : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_LONGER_NAME+" HimanshuVasantBhaisareIsMyFullName : FAIL");
-        }
-    }
-
-    private void testCreateUserWithShorterName() {
-        String result = Braintree.handle("user Him");
-        if (result.contains(Error.USERNAME_INVALID)) {
-            System.out.println(CREATE_USER_WITH_SHORTER_NAME+" Him : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_SHORTER_NAME+" Him : FAIL");
-        }
-    }
-
-    private void testCreateUserWithUnderscoreName() {
-        Braintree.handle("user Him_an_shu");
-        User user = Database.getUser("Him_an_shu");
-        if (user != null) {
-            System.out.println(CREATE_USER_WITH_UNDERSCORE_NAME+" Him_an_shu : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_UNDERSCORE_NAME+" Him_an_shu : FAIL");
-        }
-
-        // clear database
-        clear();
-    }
-
-    private void testCreateUserWithDashName() {
-        Braintree.handle("user Him-ans-shu");
-        User user = Database.getUser("Him-ans-shu");
-        if (user != null) {
-            System.out.println(CREATE_USER_WITH_DASH_NAME+" Him-ans-shu : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_DASH_NAME+" Him-ans-shu : FAIL");
-        }
-
-        // clear database
-        clear();
-    }
-
-    private void testCreateUserWithAlphanumericName() {
-        Braintree.handle("user H1m8n3hu");
-        User user = Database.getUser("H1m8n3hu");
-        if (user != null) {
-            System.out.println(CREATE_USER_WITH_ALPHANUM_NAME+" H1m8n3hu : PASS");
-        } else {
-            System.out.println(CREATE_USER_WITH_ALPHANUM_NAME+" H1m8n3hu : FAIL");
-        }
-
-        // clear database
-        clear();
     }
 }
