@@ -6,9 +6,9 @@ import java.util.regex.Pattern;
 public class Username {
 
     /**
-     * allow alphanumeric, dashes, underscores, min 4 & max 15 characters
+     * allow alphanumeric, dashes, underscores, min 2 & max 15 characters
      */
-    private static final String USERNAME_PATTERN = "^[a-zA-Z0-9_-]{4,15}$";
+    private static final String USERNAME_PATTERN = "^[a-zA-Z0-9_-]{2,15}$";
 
     /**
      * Validate user name

@@ -6,7 +6,11 @@ import resource.Card;
 import resource.User;
 import validator.Username;
 import validator.Validation;
+
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -99,5 +103,36 @@ public class UserService {
         }
 
         return validation;
+    }
+
+    /**
+     * return balances of all users
+     *
+     * @return
+     */
+    public String summary() {
+        String summary = "";
+        Map<String, User> users = Database.getUsers();
+        List<String> balances = users.entrySet().stream().map(userEntry -> {
+            User user = userEntry.getValue();
+            Card card = user.getCard();
+            String userName = user.getName();
+            String balance = "error";
+            if (card != null) {
+                balance = "$" + card.getBalance().toString();
+            }
+            return userName + ": " + balance;
+        }).collect(Collectors.toList());
+
+        int count = 0;
+        for (String userAndBalance : balances) {
+            count++;
+            summary += userAndBalance;
+            if (count < balances.size()) {
+                summary += "\n";
+            }
+        }
+
+        return summary;
     }
 }

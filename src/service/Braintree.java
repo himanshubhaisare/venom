@@ -27,40 +27,61 @@ public class Braintree {
      * @param input
      */
     public String handle(String input) {
-        String result;
+        String error;
         String[] inputs = input.split(" ");
         if (inputs.length < 1) {
-            result = "";
+            error = "";
         } else {
             String command = inputs[0];
             String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
             if (command == null || command.equals("")) {
-                result = "";
+                error = "";
             } else {
                 switch (command) {
                     case Command.ADD:
-                        result = this.userService.create(args);
-                        if (result.equals("")) {
-                            result = this.cardService.create(args);
+                        error = this.userService.create(args);
+                        if (error.equals("")) {
+                            error = this.cardService.create(args);
                         }
                         break;
                     case Command.CHARGE:
-                        result = this.cardService.charge(args);
+                        error = this.cardService.charge(args);
                         break;
                     case Command.CREDIT:
-                        result = this.cardService.credit(args);
-                        break;
-                    case Command.BALANCE:
-                        result = this.userService.showBalance(args);
+                        error = this.cardService.credit(args);
                         break;
                     default:
-                        result = COMMAND_NOT_RECOGNIZED;
+                        error = COMMAND_NOT_RECOGNIZED;
                         break;
                 }
             }
         }
 
-        result += "\n";
-        return result;
+        String summary = this.userService.summary();
+        return formatOutput(error, summary);
+    }
+
+    /**
+     * format the output
+     *
+     * @param error
+     * @param summary
+     * @return
+     */
+    private String formatOutput(String error, String summary) {
+        String output = "";
+        if (!error.equals("")) {
+            if (!summary.equals("")) {
+                output = error + "\n" + summary;
+            } else {
+                output = error;
+            }
+        } else {
+            if (!summary.equals("")) {
+                output = summary;
+            }
+        }
+
+        return output + "\n";
     }
 }
