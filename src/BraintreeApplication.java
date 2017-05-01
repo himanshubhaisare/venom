@@ -23,13 +23,18 @@ public class BraintreeApplication {
                 File output = Utils.getOutputFile(args);
                 FileWriter fw = new FileWriter(output.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
-                Scanner scanner = new Scanner(new File(args[0]));
-                while (scanner.hasNext()) {
-                    String input = scanner.nextLine();
-                    result = braintree.handle(input);
+                File inputFile = new File(args[0]);
+                if(inputFile.exists() && !inputFile.isDirectory()) {
+                    Scanner scanner = new Scanner(inputFile);
+                    while (scanner.hasNext()) {
+                        String input = scanner.nextLine();
+                        result = braintree.handle(input);
+                    }
+                    bw.write(result);
+                    bw.close();
+                } else {
+                    System.out.println("Input file " + args[0] + " does not exist.");
                 }
-                bw.write(result);
-                bw.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
@@ -37,16 +42,16 @@ public class BraintreeApplication {
         } else {
             System.out.println("mini braintree started in interactive mode. Enter help to see manual.");
             String input = "";
-            while (!input.equals("Close")) {
+            while (!input.equals("Close") || input.equals("close")) {
                 Scanner scanner = new Scanner(System.in);
                 input = scanner.nextLine();
-                if (input.equals("help")) {
+                if (input.equals("Help") || input.equals("help")) {
                     System.out.print(
-                            "Add <user> <card number> <$limit> : Adds a credit card on user with given credit limit e.g. Add Himanshu 5555555555554444 $1000\n" +
-                            "Charge <user> <$amount> : Charge user with given amount, increases balance on card e.g. Charge Tom $500 \n" +
-                            "Credit <user> <$amount> : Credit decreases balance on user's card by given amount e.g. Credit Lisa $100 \n" +
-                            "Close : Closes application \n" +
-                            "help : brings up manual \n");
+                        "Add <user> <card number> <$limit> : Adds a credit card on user with given credit limit e.g. Add Himanshu 5555555555554444 $1000\n" +
+                        "Charge <user> <$amount> : Charge user with given amount, increases balance on card e.g. Charge Tom $500 \n" +
+                        "Credit <user> <$amount> : Credit decreases balance on user's card by given amount e.g. Credit Lisa $100 \n" +
+                        "Close : Closes application \n" +
+                        "Help : brings up manual \n");
                 } else {
                     result = braintree.handle(input);
                     System.out.print(result);
