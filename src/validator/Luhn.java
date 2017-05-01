@@ -31,6 +31,9 @@ public class Luhn {
      * @return
      */
     public static boolean validate(String numberString) {
+        if (numberString.length() > 19) {
+            return false;
+        }
         int s1 = 0, s2 = 0;
         String reverse = new StringBuffer(numberString).reverse().toString();
         for (int i = 0; i < reverse.length(); i++) {
