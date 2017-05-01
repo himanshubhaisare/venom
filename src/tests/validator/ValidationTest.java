@@ -31,7 +31,7 @@ public class ValidationTest {
         validation.addError("Error 1");
         validation.addError("Error 2");
         String errorString = validation.getErrorString();
-        assertEquals("testErrorStringWithMultipleErrors: ", "Error 1. Error 2. ", errorString);
+        assertEquals("testErrorStringWithMultipleErrors: ", "Error 1 Error 2", errorString);
     }
 
 }

@@ -25,8 +25,13 @@ public class Validation {
 
     public String getErrorString() {
         String errorString = "";
+        int count = 0;
         for (String error : errors) {
-            errorString += error + ". ";
+            count++;
+            errorString += error;
+            if (count < errors.size()) {
+                errorString += " ";
+            }
         }
         return errorString;
     }
