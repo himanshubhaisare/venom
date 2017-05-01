@@ -1,9 +1,10 @@
-import service.*;
+import service.Braintree;
+import service.CardService;
+import service.UserService;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class BraintreeApplication {
@@ -14,15 +15,13 @@ public class BraintreeApplication {
      * @param args
      */
     public static void main(String[] args) {
+        System.out.println(Arrays.toString(args));
         String result = "";
         UserService userService = new UserService();
         CardService cardService = new CardService();
         Braintree braintree = new Braintree(userService, cardService);
         if (args.length > 1) {
             try {
-                File output = Utils.getOutputFile(args);
-                FileWriter fw = new FileWriter(output.getAbsoluteFile());
-                BufferedWriter bw = new BufferedWriter(fw);
                 File inputFile = new File(args[0]);
                 if(inputFile.exists() && !inputFile.isDirectory()) {
                     Scanner scanner = new Scanner(inputFile);
@@ -30,8 +29,7 @@ public class BraintreeApplication {
                         String input = scanner.nextLine();
                         result = braintree.handle(input);
                     }
-                    bw.write(result);
-                    bw.close();
+                    System.out.print(result);
                 } else {
                     System.out.println("Input file " + args[0] + " does not exist.");
                 }
