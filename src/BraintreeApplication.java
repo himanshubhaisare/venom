@@ -4,7 +4,6 @@ import service.UserService;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class BraintreeApplication {
@@ -15,12 +14,11 @@ public class BraintreeApplication {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(args));
         String result = "";
         UserService userService = new UserService();
         CardService cardService = new CardService();
         Braintree braintree = new Braintree(userService, cardService);
-        if (args.length > 1) {
+        if (args.length > 0) {
             try {
                 File inputFile = new File(args[0]);
                 if(inputFile.exists() && !inputFile.isDirectory()) {

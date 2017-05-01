@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-[ $# -ge 1 -a -f "$1" ] && input="$1" || input="-"
+[ $# -ge 1 -a -f "$1" ] && input="$1" ;
 
-if [[ -n "$input" ]]; then
-    java -jar braintree.jar "$input"
-else
-    java -jar braintree.jar
+cat $input > temp.txt
+line=$(head -n 1 temp.txt)
+
+if [ -n "$line" ]; then
+    java -jar braintree.jar temp.txt
 fi
