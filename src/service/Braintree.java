@@ -58,11 +58,12 @@ public class Braintree {
         }
 
         String summary = this.userService.summary();
-        return formatOutput(error, summary);
+        return summary + "\n";
+        //return formatOutput(error, summary); //Uncomment to see output with errors
     }
 
     /**
-     * format the output
+     * Shows output with errors
      *
      * @param error
      * @param summary
