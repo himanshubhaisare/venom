@@ -69,12 +69,12 @@ public class CardService {
             validation.addError(Error.USER_NOT_FOUND);
             return validation;
         }
-        if (card != null) {
-            validation.addError(Error.CARD_BELONGS_TO_ANOTHER_USER);
-            return validation;
-        }
         if (user.getCard() != null) {
             validation.addError(Error.USER_ALREADY_HAS_CARD);
+            return validation;
+        }
+        if (card != null) {
+            validation.addError(Error.CARD_BELONGS_TO_ANOTHER_USER);
             return validation;
         }
         if (!Luhn.validate(cardNumber)) {

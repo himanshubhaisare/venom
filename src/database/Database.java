@@ -44,4 +44,9 @@ public class Database {
     public static void setCard(Card card) {
         Database.cards.put(card.getNumber(), card);
     }
+
+    public static void clearAll() {
+        Database.users.clear();
+        Database.cards.clear();
+    }
 }
