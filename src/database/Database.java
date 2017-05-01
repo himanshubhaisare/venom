@@ -5,10 +5,11 @@ import resource.User;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Database {
 
-    private static Map<String, User> users = new HashMap<String, User>();
+    private static Map<String, User> users = new TreeMap<String, User>();
 
     private static Map<String, Card> cards = new HashMap<String, Card>();
 
