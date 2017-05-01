@@ -4,9 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by hbhaisare on 01/05/2017.
- */
 public class UserServiceTest {
 
     public UserServiceTest() {
