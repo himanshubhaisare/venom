@@ -5,6 +5,7 @@ import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 import org.junit.runners.Suite;
+import tests.service.BraintreeTest;
 import tests.service.CardServiceTest;
 import tests.service.UserServiceTest;
 import tests.validator.LuhnTest;
@@ -20,7 +21,7 @@ import tests.validator.ValidationTest;
     ValidationTest.class,
     CardServiceTest.class,
     UserServiceTest.class,
-    tests.service.BraintreeTest.class
+    BraintreeTest.class
 })
 public class BraintreeTestsRunner {
 

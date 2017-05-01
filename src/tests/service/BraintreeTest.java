@@ -82,7 +82,7 @@ public class BraintreeTest {
         input = "Charge Himanshu $800";
         String result = this.braintree.handle(input);
         Card card = Database.getCard("5454545454545454");
-        assertEquals("testBraintreeHandlesAddCommand: ", "Himanshu: $800", result);
+        assertEquals("testBraintreeHandlesChargeCommand: ", "Himanshu: $800", result);
         assertEquals("card balance increases after Charge: ", new BigDecimal("800"), card.getBalance());
     }
 
@@ -103,6 +103,7 @@ public class BraintreeTest {
 
     @Test
     public void testBraintreeHandlesCreditCommand() {
+        Database.clearAll();
         String input = "Himanshu 5454545454545454 $1000";
         String[] args = input.split(" ");
         this.userService.create(args);
@@ -111,7 +112,7 @@ public class BraintreeTest {
         input = "Credit Himanshu $800";
         String result = this.braintree.handle(input);
         Card card = Database.getCard("5454545454545454");
-        assertEquals("testBraintreeHandlesAddCommand: ", "Himanshu: $-800", result);
+        assertEquals("testBraintreeHandlesCreditCommand: ", "Himanshu: $-800", result);
         assertEquals("card balance decreases after credit: ", new BigDecimal("-800"), card.getBalance());
     }
 }
