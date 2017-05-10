@@ -10,6 +10,8 @@ public class Username {
      */
     private static final String USERNAME_PATTERN = "^[a-zA-Z0-9_-]{2,15}$";
 
+    private static final Pattern pattern = Pattern.compile(USERNAME_PATTERN);
+
     /**
      * Validate user name
      *
@@ -17,7 +19,6 @@ public class Username {
      * @return
      */
     public static boolean validate(String username) {
-        Pattern pattern = Pattern.compile(USERNAME_PATTERN);
         Matcher matcher = pattern.matcher(username);
         return matcher.matches();
     }
